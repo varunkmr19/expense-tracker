@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
-from django.views import View, generic
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from .forms import BillForm
 from .models import User, Bill
 
 # Create your views here.
@@ -62,30 +64,67 @@ class IndexView(View):
   def get(self, request):
     return render(request, 'expense_app/index.html')
 
-class BillListView(generic.list.ListView):
-  # List bills of active user
-  model = Bill
-  context_object_name = 'bills'
-  template_name = 'expense_app/home.html'
+@login_required
+def home_view(request):
+  # get bills
+  bills = Bill.objects.filter(added_by=request.user).all()
+  return render(request, 'expense_app/home.html', {
+    'bills': bills
+  })
 
-  # def get_queryset(self):
-  #   queryset = Bill.objects.filter(added_by=self.request.user)
+@login_required
+def create_bill(request):
+  if request.method == 'POST':
+    form = BillForm(request.POST)
+    if form.is_valid():
+      category = form.cleaned_data['category']
+      description = form.cleaned_data['description']
+      amount = form.cleaned_data['amount']
+      new_bill = Bill.objects.create(
+        added_by=request.user,
+        category=category,
+        description=description,
+        amount=amount
+      )
+      new_bill.save()
+    return HttpResponseRedirect(reverse('home'))
+  else:
+    form = BillForm()
+    return render(request, 'expense_app/create_bill.html', {
+      'form':form
+    })
 
-class BillDetailView(generic.detail.DetailView):
-  model = Bill
-  context_object_name = 'bill'
-  template_name = 'expense_app/bill_detail.html'
+@login_required
+def bill_detail_view(request, pk):
+  bill = get_object_or_404(Bill, pk=pk)
+  return render(request, 'expense_app/bill_detail.html', {
+    'bill': bill
+  })
 
+@login_required
+def edit_bill(request, pk):
+  try:
+    bill = Bill.objects.get(added_by=request.user, pk=pk)
+  except Bill.DoesNotExist:
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-class BillCreateView(generic.edit.CreateView):
-  model = Bill
-  template_name = 'expense_app/create_bill.html'
-  success_url = "/home"
-  fields = ['category', 'description', 'amount']
+  form = BillForm(request.POST or None, instance=bill)
 
-class BillUpdateView(generic.edit.UpdateView):
-  model = Bill
-  template_name = 'expense_app/create_bill.html'
-  success_url = "/home"
-  fields = ['category', 'description', 'amount']
+  if form.is_valid():
+    bill.category = form.cleaned_data['category']
+    bill.description = form.cleaned_data['description']
+    bill.amount = form.cleaned_data['amount']
+    bill.save()
+
+    return HttpResponseRedirect(f'/bill/{pk}')
+  
+  return render(request, 'expense_app/create_bill.html', {
+    'form': form
+  })
+
+@login_required
+def delete_bill(request, pk):
+  bill = get_object_or_404(Bill, pk=pk)
+  bill.delete()
+  return HttpResponseRedirect(reverse('home'))
 

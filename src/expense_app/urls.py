@@ -6,8 +6,9 @@ urlpatterns = [
     path('login', views.LoginView.as_view(), name='login'),
     path('register', views.RegistrationView.as_view(), name='register'),
     path('logout', views.logout_view, name='logout'),
-    path('home', views.BillListView.as_view(), name='home'),
-    path('bill/<int:pk>', views.BillDetailView.as_view(), name='bill'),
-    path('bill/create', views.BillCreateView.as_view(), name='create_bill'),
-    path('bill/update/<int:pk>', views.BillUpdateView.as_view(), name='update_bill')
+    path('home', views.home_view, name='home'),
+    path('bill/<int:pk>', views.bill_detail_view, name='bill_detail'),
+    path('bill/create', views.create_bill, name='create_bill'),
+    path('bill/update/<int:pk>', views.edit_bill, name='edit_bill'),
+    path('bill/delete/<int:pk>', views.delete_bill, name='delete_bill'),
 ]
