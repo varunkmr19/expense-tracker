@@ -76,3 +76,16 @@ class BillDetailView(generic.detail.DetailView):
   context_object_name = 'bill'
   template_name = 'expense_app/bill_detail.html'
 
+
+class BillCreateView(generic.edit.CreateView):
+  model = Bill
+  template_name = 'expense_app/create_bill.html'
+  success_url = "/home"
+  fields = ['category', 'description', 'amount']
+
+class BillUpdateView(generic.edit.UpdateView):
+  model = Bill
+  template_name = 'expense_app/create_bill.html'
+  success_url = "/home"
+  fields = ['category', 'description', 'amount']
+
