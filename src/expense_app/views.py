@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
-from django.views import View
-from .models import User
+from django.views import View, generic
+from .models import User, Bill
 
 # Create your views here.
 class LoginView(View):
@@ -61,3 +61,18 @@ class RegistrationView(View):
 class IndexView(View):
   def get(self, request):
     return render(request, 'expense_app/index.html')
+
+class BillListView(generic.list.ListView):
+  # List bills of active user
+  model = Bill
+  context_object_name = 'bills'
+  template_name = 'expense_app/home.html'
+
+  # def get_queryset(self):
+  #   queryset = Bill.objects.filter(added_by=self.request.user)
+
+class BillDetailView(generic.detail.DetailView):
+  model = Bill
+  context_object_name = 'bill'
+  template_name = 'expense_app/bill_detail.html'
+
