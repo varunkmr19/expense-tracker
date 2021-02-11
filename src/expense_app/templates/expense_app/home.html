@@ -3,11 +3,43 @@
 {% block title %} Homepage {% endblock %}
 
 {% block body %}
-<ul>
-  {% for bill in bills %}
-  <li>{{ bill.category }} : {{ bill.amount }}</li>
-  {% empty %}
-    <p>No bills. Yay!</p>
-  {% endfor %}
-</ul>
+<div class="ui container">
+  <h1 class="ui header">Bills for Current Month</h1>
+  <table class="ui celled table">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Added on</th>
+        <th>Total Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bill in bills %}
+        <tr>
+          <td data-label="Category">
+            {{ bill.category }}
+          </td>
+          <td data-label="Description">
+            {{ bill.description }}
+          </td>
+          <td data-label="Added on">
+            {{ bill.created_at }}
+          </td>
+          <td data-label="Total Amount">
+            {{ bill.amount }}
+          </td>
+        </tr>
+      {% endfor %}
+      <thead>
+        <tr>
+          <th>Total Amount</th>
+          <td>{{ total }}</td>
+          <th>Amount Per Share</th>
+          <td>{{ share }}</td>
+        </tr>
+      </thead>
+    </tbody>
+  </table>
+</div>
 {% endblock %}

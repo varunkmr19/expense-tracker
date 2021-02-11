@@ -1,11 +1,21 @@
-<h1>Login Form</h1>
-<hr>
+{% extends 'expense_app/layout.html' %}
 
-<form method="POST">
-  {% csrf_token %}
-  <label for="username">Username</label>
-  <input type="text" name="username" id="username">
-  <label for="pass">Password</label>
-  <input type="password" name="password" id="pass">
-  <button>Login</button>
-</form>
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="ui container">
+  <h1>Login</h1>
+  <form class="ui form" method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label>Username</label>
+      <input type="text" name="username" placeholder="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="password">
+    </div>
+    <button class="ui button" type="submit">Login</button>
+  </form>
+</div>
+{% endblock %}

@@ -68,8 +68,16 @@ class IndexView(View):
 def home_view(request):
   # get bills
   bills = Bill.objects.filter(added_by=request.user).all()
+  total_amount = 0
+  for bill in bills:
+    total_amount += bill.amount
+
+  bill_per_share = total_amount/4
+
   return render(request, 'expense_app/home.html', {
-    'bills': bills
+    'bills': bills,
+    'total': total_amount,
+    'share': bill_per_share
   })
 
 @login_required
