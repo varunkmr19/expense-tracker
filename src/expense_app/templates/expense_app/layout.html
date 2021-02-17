@@ -15,6 +15,7 @@
     </div>
     {% if user.is_authenticated %}
       <a class="active item" href="{% url 'home' %}">Home</a>
+      <a class="ui item" href="{% url 'create_bill' %}">Add Bill</a>
       <div class="right menu">
         <a class="ui item" href="{% url 'logout' %}">Logout</a>
       </div>
