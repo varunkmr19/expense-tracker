@@ -1,8 +1,0 @@
-from django.forms import ModelForm
-from . models import Bill
-
-class BillForm(ModelForm):
-  class Meta:
-    model = Bill
-    fields = ['category', 'description', 'amount']
-

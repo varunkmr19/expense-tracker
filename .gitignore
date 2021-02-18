@@ -1,6 +1,4 @@
 env
 src/.env
-src/db.sqlite3
-src/expense_app/migrations
-src/expense_app/__pycache__
-src/expense_project/__pycache__
+src/core/__pycache__
+src/expenses/migrations
