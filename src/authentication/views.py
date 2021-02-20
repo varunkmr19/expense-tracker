@@ -35,5 +35,29 @@ class RegistrationView(View):
         return render(request, 'authentication/register.html')
 
     def post(self, request):
-        messages.success(request, 'Account is created successfully.')
+        # save form values to render back to the user in case of errors
+        context = {
+            'field_values': request.POST
+        }
+        # Get user data
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # validate user data
+        if not User.objects.filter(username=username).exists():
+            if not User.objects.filter(email=email).exists():
+                if len(password) < 6:
+                    messages.error(request, 'password must be greated than 6.')
+                    return render(request, 'authentication/register.html', context)
+                # create and save user
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+                user.save()
+                messages.success(
+                    request, 'Account created successfully. Please, login to continue.')
+                return render(request, 'authentication/register.html')
         return render(request, 'authentication/register.html')

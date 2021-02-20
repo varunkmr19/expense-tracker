@@ -1,3 +1,5 @@
+const submitButton = document.querySelector(".submit-btn");
+
 const usernameField = document.querySelector("#username");
 const usernameFeedback = document.querySelector("#username-feedback");
 
@@ -20,8 +22,10 @@ emailField.addEventListener("keyup", (e) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
+          submitButton.disabled = true;
           emailField.classList.add("is-invalid");
         } else {
+          submitButton.removeAttribute("disabled");
           emailField.classList.add("is-valid");
         }
       });
@@ -46,11 +50,13 @@ usernameField.addEventListener("keyup", (e) => {
       .then((data) => {
         console.log(data);
         if (data.error) {
+          submitButton.disabled = true;
           usernameField.classList.add("is-invalid");
           usernameFeedback.style.display = "block";
           usernameFeedback.classList.add("invalid-feedback");
           usernameFeedback.innerHTML = `<p>${data.error}</p>`;
         } else {
+          submitButton.removeAttribute("disabled");
           usernameFeedback.innerHTML = `<p>${username} is avaliable.</p>`;
           usernameFeedback.style.display = "block";
           usernameFeedback.classList.add("valid-feedback");
