@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-import django_heroku
 from pathlib import Path
+from django.contrib import messages
+import django_heroku
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -131,3 +132,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 django_heroku.settings(locals())
+
+# Change Message tags to align with Bootstrap's alert classes
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}

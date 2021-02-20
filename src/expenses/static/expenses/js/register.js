@@ -1,5 +1,5 @@
 const usernameField = document.querySelector("#username");
-const usernameFeedback = document.querySelector(".username-feedback");
+const usernameFeedback = document.querySelector("#username-feedback");
 
 const emailField = document.querySelector("#email");
 
@@ -57,5 +57,18 @@ usernameField.addEventListener("keyup", (e) => {
           usernameField.classList.add("is-valid");
         }
       });
+  }
+});
+
+// show password toggle
+const showPasswordCheckBox = document.querySelector("#show-password-toggle");
+
+showPasswordCheckBox.addEventListener("click", () => {
+  // get password field
+  const passwordField = document.querySelector("#password");
+  if (passwordField.type === "password") {
+    passwordField.type = "text";
+  } else {
+    passwordField.type = "password";
   }
 });
