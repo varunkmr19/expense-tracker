@@ -1,6 +1,33 @@
 const usernameField = document.querySelector("#username");
 const usernameFeedback = document.querySelector(".username-feedback");
 
+const emailField = document.querySelector("#email");
+
+emailField.addEventListener("keyup", (e) => {
+  // remove existing classes
+  emailField.classList.remove("is-invalid"); // red border
+  emailField.classList.remove("is-valid"); // green border
+
+  // get email
+  const email = e.target.value;
+
+  // make API call
+  if (email.length > 0) {
+    fetch("/auth/validate_email", {
+      body: JSON.stringify({ email: email }),
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          emailField.classList.add("is-invalid");
+        } else {
+          emailField.classList.add("is-valid");
+        }
+      });
+  }
+});
+
 usernameField.addEventListener("keyup", (e) => {
   usernameField.classList.remove("is-invalid");
   usernameField.classList.remove("is-valid");
