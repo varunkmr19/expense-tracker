@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views import View
 from django.contrib import messages
+from django.db import IntegrityError
 from django.contrib.auth.models import User
 from validate_email import validate_email
 
@@ -45,19 +46,25 @@ class RegistrationView(View):
         password = request.POST['password']
 
         # validate user data
-        if not User.objects.filter(username=username).exists():
-            if not User.objects.filter(email=email).exists():
-                if len(password) < 6:
-                    messages.error(request, 'password must be greated than 6.')
-                    return render(request, 'authentication/register.html', context)
-                # create and save user
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password
-                )
-                user.save()
-                messages.success(
-                    request, 'Account created successfully. Please, login to continue.')
-                return render(request, 'authentication/register.html')
-        return render(request, 'authentication/register.html')
+        if User.objects.filter(email=email).exists():
+            messages.error(
+                request, 'Email already in use. Try another one.')
+            return render(request, 'authentication/register.html', context)
+        if len(password) < 6:
+            messages.error(request, 'password must be greated than 6.')
+            return render(request, 'authentication/register.html', context)
+
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            user.save()
+            messages.success(
+                request, 'Account created successfully. Please, login to continue.')
+            return render(request, 'authentication/register.html')
+        except IntegrityError:
+            messages.error(request, 'Username already exists.')
+            return render(request, 'authentication/register.html', context)
