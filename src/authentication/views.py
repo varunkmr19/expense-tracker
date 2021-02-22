@@ -1,9 +1,10 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.views import View
 from django.contrib import messages
 from django.db import IntegrityError
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from validate_email import validate_email
 
@@ -68,3 +69,29 @@ class RegistrationView(View):
         except IntegrityError:
             messages.error(request, 'Username already exists.')
             return render(request, 'authentication/register.html', context)
+
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'authentication/login.html')
+
+    def post(self, request):
+        context = {
+            'field_values': request.POST
+        }
+        # get user data
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # Attempt to sign user in
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            messages.success(
+                request, f'Welcome {username}, you are now logged in.')
+            return redirect('index')
+        else:
+            messages.error(request, 'Username/Password is incorrect.')
+            return render(request, 'authentication/login.html', context)
