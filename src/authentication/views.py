@@ -89,9 +89,13 @@ class LoginView(View):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            messages.success(
-                request, f'Welcome {username}, you are now logged in.')
             return redirect('index')
         else:
             messages.error(request, 'Username/Password is incorrect.')
             return render(request, 'authentication/login.html', context)
+
+
+def LogoutView(request):
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('login')
