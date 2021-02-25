@@ -3,4 +3,7 @@ src/.env
 src/core/__pycache__
 src/expenses/__pycache__
 src/expenses/migrations
+src/authentication/__pycache__
 src/authentication/migrations
+src/userpreferences/__pycache__
+src/userpreferences/migrations
