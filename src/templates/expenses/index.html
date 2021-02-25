@@ -1,5 +1,32 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1>Hello World!</h1>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="add expenses">My Expenses</li>
+        </ul>
+      </nav>
+    </div>
+    <div class="col-md-2">
+      <a href="{% url 'add_expenses' %}" class="btn btn-primary">Add Expense</a>
+    </div>
+    <div class="container">
+      <tabel class="table-stripped table-hover">
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+      </tabel>
+    </div>
+  </div>
+  {% include 'partials/_messages.html' %}
+</div>
 {% endblock %}
