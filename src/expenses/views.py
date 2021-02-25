@@ -10,7 +10,11 @@ from . import utils
 
 @login_required(login_url='/auth/login')
 def index_view(request):
-    return render(request, 'expenses/index.html')
+    expenses = Expense.objects.filter(owner=request.user).order_by('-date')
+    context = {
+        'expenses': expenses
+    }
+    return render(request, 'expenses/index.html', context)
 
 
 def add_expenses(request):
