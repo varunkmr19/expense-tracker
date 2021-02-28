@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="delete expenses">Delete Expenses</li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Delete Expense</h1>
+        <form method="POST">
+            {% include 'partials/_messages.html' %}
+            {% csrf_token %}
+            <p>Are you sure you want to delete <strong>"{{ object }}"</strong>?</p>
+            <input type="submit" value="Confirm" class="btn btn-danger">
+            <a href="{% url 'expenses' %}" class="btn btn-success">Cancel</a>
+    </form>
+    </div>
+</div>
+{% endblock %}

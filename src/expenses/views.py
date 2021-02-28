@@ -3,6 +3,8 @@ from django import contrib
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic.edit import DeleteView
 from .models import Category, Expense
 from . import utils
 
@@ -90,3 +92,9 @@ def edit_expense(request, expense_id):
         return redirect('expenses')
 
     return render(request, 'expenses/edit_expense.html', context)
+
+
+class DeleteExpense(DeleteView):
+    model = Expense
+    success_url = reverse_lazy('expenses')
+    template_name = 'expenses/delete_expense.html'
