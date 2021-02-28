@@ -1,8 +1,10 @@
+from django.core import paginator
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 from django.views.generic.edit import DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import Category, Expense
@@ -14,8 +16,12 @@ from . import utils
 @login_required(login_url='/auth/login')
 def index_view(request):
     expenses = Expense.objects.filter(owner=request.user).order_by('-date')
+    paginator = Paginator(expenses, 2)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator, page_number)
     context = {
-        'expenses': expenses
+        'expenses': expenses,
+        'page_obj': page_obj
     }
     return render(request, 'expenses/index.html', context)
 
