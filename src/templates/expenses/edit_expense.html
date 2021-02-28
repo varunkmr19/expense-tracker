@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="edit expenses">Edit Expenses</li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Edit Expenses</h1>
+        <form action="{% url 'edit_expense' expense.id %}" method="POST">
+            {% include 'partials/_messages.html' %}
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="">Category</label>
+                <select name="category" class="form-control">
+                    {% for category in categories %}
+                        {% if category.name == expense.category %}
+                            <option name="category" value="{{ category.name }}" selected="selected">
+                                {{ category.name }}
+                            </option>
+                        {% else %}
+                            <option name="category" value="{{ category.name }}">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}  
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Amount</label>
+                <input type="text" class="form-control" name="amount"
+                value="{{ expense.amount }}">
+            </div>
+            <div class="form-group">
+                <label for="">Date</label>
+                <input type="date" class="form-control" name="date">
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <textarea name="description" class="form-control" rows="3">{{ expense.description }}</textarea>
+            </div>
+            <input type="submit" value="Update" class="btn btn-primary btn-block">
+    </form>
+    </div>
+</div>
+{% endblock %}

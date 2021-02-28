@@ -89,7 +89,7 @@ class LoginView(View):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('expenses')
         else:
             messages.error(request, 'Username/Password is incorrect.')
             return render(request, 'authentication/login.html', context)
