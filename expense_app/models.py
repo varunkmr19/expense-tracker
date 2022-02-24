@@ -8,6 +8,9 @@ class Category(models.Model):
   name = models.CharField(max_length=120)
   icon = models.FileField(upload_to=category_icon_directory_path)
 
+  class Meta():
+    verbose_name_plural = "categories"
+
   def __str__(self) -> str:
     return self.name
 
