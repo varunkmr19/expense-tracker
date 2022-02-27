@@ -15,7 +15,7 @@ class Category(models.Model):
     return self.name
 
 class Transaction(models.Model):
-  ''' Model to track all exenses '''
+  ''' Model to track all expenses '''
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
   amount = models.DecimalField(max_digits=12, decimal_places=2) # max upto 1 billion, sorry Elon :D
   category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='transactions', null=True)
