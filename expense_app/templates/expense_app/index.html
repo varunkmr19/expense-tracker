@@ -13,7 +13,7 @@
     {% for category in categories %}
     <li style="font-weight: bold;">{{category.name}}</li>
     <ul>
-      {% for sub_category in category.child.all %}
+      {% for sub_category in category.subcategory.all %}
       <li>{{ sub_category.name }}</li>
       {% endfor %}
     </ul>
