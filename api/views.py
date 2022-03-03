@@ -1,10 +1,9 @@
-from unicodedata import category
-from urllib import request
+from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from expense_app.models import Category, SubCategory, Transaction
 from api.serializers import CategorySerializer, TransactionSerializer
+from api.response import response
 
 
 class ListCategories(APIView):
@@ -17,7 +16,7 @@ class ListCategories(APIView):
     """
     categories = Category.objects.prefetch_related('subcategory').all()
     serializer = CategorySerializer(categories, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return response(status=status.HTTP_200_OK, message="Success", data=serializer.data)
 
 
 class ListTransactions(APIView):
@@ -30,7 +29,7 @@ class ListTransactions(APIView):
     """
     transactions = Transaction.objects.filter(user=request.user)
     serializer = TransactionSerializer(transactions, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return response(status=status.HTTP_200_OK, message="Success", data=serializer.data)
 
   def post(self, request, format=None):
     """
@@ -42,7 +41,7 @@ class ListTransactions(APIView):
       data.pop('category')
       transaction = Transaction.objects.create(user=request.user, category=sub_category, **data)
       serializer = TransactionSerializer(transaction)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
+      return response(status=status.HTTP_201_CREATED, message="Success", data=serializer.data)
     except SubCategory.DoesNotExist:
-      return Response(exception=True, status=status.HTTP_404_NOT_FOUND)
+      return response(status=status.HTTP_404_NOT_FOUND, message="Category not found")
     
