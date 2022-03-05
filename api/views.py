@@ -1,9 +1,20 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from expense_app.models import Category, SubCategory, Transaction
-from api.serializers import CategorySerializer, SubCategorySerializer, TransactionSerializer
+from api.serializers import CategorySerializer, TransactionSerializer, UserSerializer
 from api.response import response
 
+
+class UserRegistration(APIView):
+  """
+  Create new user
+  """
+  def post(self, request, format=None):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return response(status=status.HTTP_201_CREATED, message="User created successfully")
+    return response(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors)
 
 class ListCategories(APIView):
   """
