@@ -5,4 +5,5 @@ urlpatterns = [
   path('categories/', views.ListCategories.as_view()),
   path('transactions/', views.ListTransactions.as_view()),
   path('transactions/<int:pk>', views.TransactionDetail.as_view()),
+  path('register/', views.UserRegistration.as_view())
 ]
